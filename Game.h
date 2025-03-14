@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <iostream>
 
@@ -10,8 +10,9 @@
 
 #include "MainMenu.h"
 #include "GameState.h"
+#include "UIGame.h"
 
-class MainMenu;
+
 
 class Game
 {
@@ -23,6 +24,7 @@ private:
 	GameState gameState;
 
 	MainMenu* mainMenu;
+	UIGame* uiGame;
 
 
 	sf::Event event;
@@ -43,6 +45,7 @@ public:
 
 	
 	void pollEvents();
+	void updateGameState();
 	void update();
 	void render();
 
