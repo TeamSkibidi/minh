@@ -1,5 +1,7 @@
-﻿#include "MainMenu.h"
+#include "MainMenu.h"
 #include <iostream>
+#include "Game.h"
+#include "UIGame.h"
 
 void MainMenu::initFont() {
 	if (!this->font.loadFromFile("Dosis-VariableFont_wght.ttf")) {
@@ -55,7 +57,7 @@ MainMenu::MainMenu(sf::RenderWindow* window)
 	this->initFont();
 	this->initTitle();
 	this->initAllButton();
-	
+
 }
 
 void MainMenu::handleEvent(sf::Event event, GameState& state)
@@ -63,8 +65,7 @@ void MainMenu::handleEvent(sf::Event event, GameState& state)
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
 		sf::Vector2f mousePos = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
-
-
+		std::cout << "phungu";
 		for (int i = 0; i < 4; i++)
 		{
 			if (this->buttons[i].getGlobalBounds().contains(mousePos))
@@ -91,7 +92,6 @@ void MainMenu::handleEvent(sf::Event event, GameState& state)
 void MainMenu::render()
 {
 	this->window->draw(this->title);
-
 	for (int i = 0; i < 4; i++)
 	{
 		this->window->draw(this->buttons[i]);
