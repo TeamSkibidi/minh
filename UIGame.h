@@ -2,8 +2,9 @@
 
 
 #include <SFML/Graphics.hpp>
-
-
+#include "Game_Functions.h"
+#include "MainMenu.h"
+#include "GameState.h"
 class DashBoard;
 class GridGame;
 
@@ -14,7 +15,10 @@ private:
 	sf::RenderWindow* window;
 	DashBoard* dashboard;
 	GridGame* grid;
+	MainMenu* mainMenu;
 	
+	Game_Functions& GameFunction;
+	GameState gameState;
 	sf::Event event;
 	sf::View view;
 	
@@ -26,14 +30,16 @@ private:
 	void initGrid();
 
 public:
-	UIGame(sf::RenderWindow* window);
+	UIGame(sf::RenderWindow* window, Game_Functions& GF);
 	~UIGame();
 
 
 	const bool running() const;
 
-
+	void updateWindow();
 	void pollevent();
+	void updatePollevent();
 	void update();
 	void render();
+	
 };
