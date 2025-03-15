@@ -17,6 +17,8 @@ private:
 	sf::RenderWindow* window;
 	sf::Font font;
 	sf::Text title;
+	GameState gameState;
+
 
 	sf::RectangleShape buttons[4];
 	sf::Text buttonTexts[4];
