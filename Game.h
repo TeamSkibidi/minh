@@ -11,6 +11,8 @@
 #include "MainMenu.h"
 #include "GameState.h"
 #include "UIGame.h"
+#include "Game_Functions.h"
+#include "DashBoard.h"
 
 
 
@@ -21,10 +23,13 @@ private:
 	sf::VideoMode videoMode;
 	sf::RenderWindow* window;
 
-	GameState gameState;
+	
 
+	DashBoard* dashboard;
 	MainMenu* mainMenu;
 	UIGame* uiGame;
+	GameState gameState;
+	Game_Functions GameFunction;
 
 
 	sf::Event event;
@@ -38,6 +43,7 @@ public:
 	//Constructors and Destructor
 	Game();
 	~Game();
+	
 
 
 	//Functions
@@ -46,10 +52,13 @@ public:
 	
 	void pollEvents();
 	void updateGameState();
+	void updateGamefunction();
+	//void updatePollevent();
 	void update();
 	void render();
-
-
+	Game_Functions& getFunction() {
+		return GameFunction;
+	}
 };
 
 
