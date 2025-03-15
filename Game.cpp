@@ -1,5 +1,8 @@
 #include "Game.h"
+#include <iostream>
 
+
+using namespace std;
 
 void Game::initWindow()
 {
@@ -21,8 +24,6 @@ Game::Game()
 {
     this->initWindow();
     this->initMainMenu();
-    
-    
 }
 
 Game::~Game()
@@ -47,63 +48,91 @@ const bool Game::running() const
 
 void Game::pollEvents()
 {
-
     if (!this->window) return;
 
-    while (this->window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
+    // Take Event
+    while (this->window->pollEvent(event)) 
+    {
+
+        if (event.type == sf::Event::Closed) 
+        {
             this->window->close();
         }
 
+        // Programming a Game Menu
         if (this->gameState == GameState::MAIN_MENU)
         {
             this->mainMenu->handleEvent(event, this->gameState);
+            cout << " NO ";
         }
-        
-        
+
+        // Programming a Play Game Classic Mode
+        if (this->GameFunction == Game_Functions::GAMECLASSIC) 
+        {
+            this->uiGame->update();
+            cout << "L";
+        }
     }
 }
 
+
+// Update Game Menu
 void Game::updateGameState()
 {
-
     if (this->gameState == GameState::PLAYING)
     {
         if (this->uiGame == nullptr)
         {
+            // Delete window Menu and create window Game UI
             delete this->mainMenu;
             this->mainMenu = nullptr;
-            this->uiGame = new UIGame(this->window);
+            this->uiGame = new UIGame(this->window, this->getFunction());
+            this->GameFunction = Game_Functions::GAMECLASSIC;
+            std::cout << "check";
         }
-        
+    }
+   
+
+}
+// Update Game State Management
+void Game::updateGamefunction() {
+    if (this->GameFunction == Game_Functions::DELETEGAME && this->uiGame != nullptr)
+    {
+        // Delete window Game Ui and create window Menu
+        delete this->uiGame;
+        this->uiGame = nullptr;
+        this->mainMenu = new MainMenu(this->window);
+        this->gameState = GameState::MAIN_MENU;
+        cout << "Check HOME";
     }
 }
 
+
+// Update Game Mode
 void Game::update()
 {
-    this->pollEvents();
+    if (this->mainMenu != nullptr) {
+        this->pollEvents();
+    }
+    if (this->uiGame != nullptr) {
+        this->uiGame->update();
+        cout << " K ";
+    }
+    this->updateGamefunction();
     this->updateGameState();
+    std::cout << "P";
 }
 
 
+// Render Game Mode
 void Game::render()
 {
-
     if (!this->window) return;
     this->window->clear(sf::Color(239, 227, 203));
 
     if (this->gameState == GameState::MAIN_MENU && this->mainMenu)
     {
         this->mainMenu->render();
-    }
-    else if (this->gameState == GameState::PLAYING && this->uiGame)
-    {
-        this->uiGame->render();
-    }
-    else if (this->gameState == GameState::PLAYING && this->uiGame)
-    {
-        this->uiGame->render();
-
     }
     else if (this->gameState == GameState::PLAYING && this->uiGame)
     {
