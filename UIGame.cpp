@@ -6,8 +6,9 @@
 #include <sstream>
 #include "UIGame.h"
 #include "DashBoard.h"
-#include "Grid.h"
+#include "GridGame.h"
 #include "Game.h"
+#include "GameLogic.h"
 
 // Measure game FPS
 void UIGame::checkFPS()
@@ -40,7 +41,7 @@ UIGame::UIGame(sf::RenderWindow* window, Game_Functions& GF) : GameFunction(GF) 
 	this->initDashBoard();
 	this->initGrid();
 	this->update();
-	this->GameFunction = Game_Functions::GAMECLASSIC;
+	/*this->GameFunction = Game_Functions::GAMECLASSIC;*/
 
 }
 
@@ -48,7 +49,7 @@ UIGame::~UIGame()
 {
 	delete this->dashboard;
 	delete this->grid;
-	
+
 	this->dashboard = nullptr;
 	this->grid = nullptr;
 
@@ -98,13 +99,40 @@ void UIGame::pollevent()
 		}
 		// Check for window changes
 		this->updateWindow();
-		
+
 		// Detect mouse button click 
 		if (this->GameFunction == Game_Functions::GAMECLASSIC) {
 			this->dashboard->pressdFuncion(event, this->GameFunction);
 			std::cout << "dmm";
 		}
 		std::cout << "z";
+
+		if (this->event.type == sf::Event::KeyPressed) {
+			bool moved = false;
+			switch (this->event.key.code) {
+			case sf::Keyboard::Up:
+				goup(*this->grid);
+				moved = true;
+				break;
+			case sf::Keyboard::Down:
+				godown(*this->grid);
+				moved = true;
+				break;
+			case sf::Keyboard::Left:
+				turnleft(*this->grid);
+				moved = true;
+				break;
+			case sf::Keyboard::Right:
+				turnright(*this->grid);
+				moved = true;
+				break;
+			default:
+				break;
+			}
+			if (moved) {
+				random_pos(this->grid->getBoardGame());
+			}
+		}
 	}
 }
 
@@ -136,8 +164,9 @@ void UIGame::render()
 		this->dashboard->render();
 		this->grid->RenderGridGame();
 	}
-}
 
+
+}
 
 
 
