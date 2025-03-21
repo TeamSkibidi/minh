@@ -6,10 +6,10 @@ using namespace std;
 
 void Game::initWindow()
 {
-	this->videoMode = sf::VideoMode(600, 800);
-	this->window = new sf::RenderWindow(this->videoMode, "Game 2", sf::Style::Titlebar | sf::Style::Close);
+    this->videoMode = sf::VideoMode(600, 800);
+    this->window = new sf::RenderWindow(this->videoMode, "Game 2", sf::Style::Titlebar | sf::Style::Close);
     this->gameState = GameState::MAIN_MENU;
-   
+
 }
 
 void Game::initMainMenu()
@@ -31,7 +31,7 @@ Game::~Game()
 
     delete this->mainMenu;
     this->mainMenu = nullptr;
-    
+
     delete this->window;
     this->window = nullptr; // Tránh trỏ vào vùng nhớ không hợp lệ
 
@@ -43,7 +43,7 @@ Game::~Game()
 
 const bool Game::running() const
 {
-	return this->window->isOpen();
+    return this->window->isOpen();
 }
 
 void Game::pollEvents()
@@ -51,10 +51,10 @@ void Game::pollEvents()
     if (!this->window) return;
 
     // Take Event
-    while (this->window->pollEvent(event)) 
+    while (this->window->pollEvent(event))
     {
 
-        if (event.type == sf::Event::Closed) 
+        if (event.type == sf::Event::Closed)
         {
             this->window->close();
         }
@@ -66,12 +66,6 @@ void Game::pollEvents()
             cout << " NO ";
         }
 
-        // Programming a Play Game Classic Mode
-        if (this->GameFunction == Game_Functions::GAMECLASSIC) 
-        {
-            this->uiGame->update();
-            cout << "L";
-        }
     }
 }
 
@@ -91,7 +85,7 @@ void Game::updateGameState()
             std::cout << "check";
         }
     }
-   
+
 
 }
 // Update Game State Management
@@ -104,6 +98,13 @@ void Game::updateGamefunction() {
         this->mainMenu = new MainMenu(this->window);
         this->gameState = GameState::MAIN_MENU;
         cout << "Check HOME";
+    }
+
+    if (this->GameFunction == Game_Functions::REFRESH) {
+        delete this->uiGame;
+        this->uiGame = new UIGame(this->window, this->getFunction());
+        this->GameFunction = Game_Functions::GAMECLASSIC;
+
     }
 }
 
@@ -140,7 +141,6 @@ void Game::render()
     }
     this->window->display();
 }
-
 
 
 
