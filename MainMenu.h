@@ -1,37 +1,106 @@
-#pragma once
-
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
+#include "MainMenu.h"
 #include <iostream>
-#include "GameState.h"
 
-class Game;
+void MainMenu::initFont() {
+	if (!this->font.loadFromFile("Dosis-VariableFont_wght.ttf")) {
+		std::cout << "Cannot load font!" << std::endl;
+	}
+}
 
-class MainMenu
+
+
+void MainMenu::initTitle()
 {
-private:
-	sf::RenderWindow* window;
-	sf::Font font;
-	sf::Text title;
-	GameState gameState;
+	this->title.setFont(this->font);
+	this->title.setString("2048");
+	this->title.setCharacterSize(73);
+	this->title.setFillColor(sf::Color(90, 80, 70));
+	this->title.setPosition(225.f, 50.f);
+}
+
+void MainMenu::initAllButton()
+{
+	this->initButton(0, { 150.f, 200.f }, sf::Color(230, 124, 93), "Classic Mode");
+	this->initButton(1, { 150.f, 280.f }, sf::Color(239, 208, 109), "Time trial");
+	this->initButton(2, { 150.f, 360.f }, sf::Color(239, 197, 85), "How to play");
+	this->initButton(3, { 150.f, 440.f }, sf::Color(60, 128, 225), "Error");
+
+}
+
+void MainMenu::initButton(int index, sf::Vector2f pos, sf::Color color, std::string text)
+{
+	//Khởi tạo một cái khung có kích thước, màu khung và vị trí
+	this->buttons[index].setSize(sf::Vector2f(300.f, 50.f));
+	this->buttons[index].setFillColor(color);
+	this->buttons[index].setPosition(pos);
+
+	//Chữ trên cái khung
+	this->buttonTexts[index].setFont(this->font);
+	this->buttonTexts[index].setString(text);
+	this->buttonTexts[index].setCharacterSize(24);
+	this->buttonTexts[index].setFillColor(sf::Color::White);
+
+	//Canh chữ ở giữa nút
+	sf::FloatRect textBounds = this->buttonTexts[index].getLocalBounds();
+
+	//Lấy vị trí chữ
+	float textX = pos.x + (300.f - textBounds.width) / 2; //Căn ngang
+	float textY = pos.y + (50.f - textBounds.height) / 2; //Căn dọc
+
+	this->buttonTexts[index].setPosition(textX, textY);
+	
+}
+
+MainMenu::MainMenu(sf::RenderWindow* window)
+{
+	this->window = window;
+	this->initFont();
+	this->initTitle();
+	this->initAllButton();
+	
+}
+
+void MainMenu::handleEvent(sf::Event event, GameState& state)
+{
+	if (event.type == sf::Event::MouseButtonReleased)
+	{
+		sf::Vector2f mousePos = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 
 
-	sf::RectangleShape buttons[4];
-	sf::Text buttonTexts[4];
+		for (int i = 0; i < 4; i++)
+		{
+			if (this->buttons[i].getGlobalBounds().contains(mousePos))
+				switch (i)
+				{
+				case 0:
+					std::cout << "Classic Mode Clicked!" << std::endl;
+					state = GameState::PLAYING;
+					break;
+				case 1:
+					state = GameState::TIME_TRIAL;
+					break;
+				case 2:
+					state = GameState::HOW_TO_PLAY;
+					break;
+				case 3:
+					state = GameState::EXIT;
+					break;
+				}
+		}
 
-	void initFont();
-	void initTitle();
-	void initAllButton();
-	void initButton(int index, sf::Vector2f pos, sf::Color color, std::string text);
-public:
+	}
+}
 
-	MainMenu(sf::RenderWindow* window);
-	void handleEvent(sf::Event event, GameState& state);
-	void render();	
-		
-};
+void MainMenu::render()
+{
+	this->window->draw(this->title);
+
+	for (int i = 0; i < 4; i++)
+	{
+		this->window->draw(this->buttons[i]);
+		this->window->draw(this->buttonTexts[i]);
+	}
+
+}
+
 
