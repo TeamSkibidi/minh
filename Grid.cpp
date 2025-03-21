@@ -1,4 +1,5 @@
-#include "Grid.h"
+#include "GridGame.h"
+#include "GameLogic.h"
 #include <vector>
 #include <SFML/Graphics.hpp>
 
@@ -10,6 +11,10 @@ void GridGame::initFont()
 	if (!this->font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
 		cout << "Error loading font!" << endl;
 	}
+}
+void GridGame::initScore()
+{
+	this->score = 0;
 }
 void GridGame::createGridGame()
 {
@@ -64,6 +69,8 @@ GridGame::GridGame(sf::RenderWindow* window)
 	if (this->BoardGame.empty()) {
 		this->createGridGame();
 	}
+	random_pos(this->BoardGame);
+	random_pos(this->BoardGame);
 }
 
 
